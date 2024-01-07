@@ -1,0 +1,463 @@
+swagger: "2.0"
+info:
+  version: 1.0.0
+  title: Equitysoft
+  description: School assignment
+basePath: /api/v1
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    Gender:
+      in: query
+      name: gender
+      schema:
+        type: string
+        enum:
+          - Male
+          - Female
+        description: The gender to filter profiles by
+      example: Male
+
+    Page:
+      in: query
+      name: page
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+        description: The page number to retrieve
+      example: 1
+
+    PerPage:
+      in: query
+      name: per_page
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 50
+        default: 10
+        description: The number of results to retrieve per page
+      example: 10
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Unauthorized
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Forbidden
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Not Found
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Internal Server Error
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Bad Request
+
+tags:
+  - name: User
+    description: Endpoints for User
+  - name: School
+    description: Endpoints for School
+  - name: Class
+    description: Endpoints for Class
+  - name: Student
+    description: Endpoints for Student
+
+paths:
+  /spec:
+    get:
+      tags:
+        - Specification
+      responses:
+        200:
+          description: Return the API specification
+  /user/login:
+    post:
+      tags:
+        - User
+      summary: Returns Authorization Token
+      description: >-
+        Authorizes default users with username and password set as root to use
+        the endpoints
+      responses:
+        "200":
+          description: Authorization token
+          examples:
+            application/json:
+              data: token
+          schema:
+            type: object
+      parameters:
+        - required: true
+          name: email
+          in: formData
+          type: string
+        - required: true
+          name: password
+          in: formData
+          type: string
+      produces:
+        - application/json
+      consumes:
+        - multipart/form-data
+  /user/signup:
+    post:
+      tags:
+        - User
+      summary: Register user data
+      description: >-
+        Register
+      responses:
+        "201":
+          description: Registerd successfully
+          examples:
+            application/json:
+              data: data
+          schema:
+            type: object
+      parameters:
+        - required: true
+          name: uniqueCode
+          in: formData
+          type: string
+        - required: true
+          name: firstName
+          in: formData
+          type: string
+        - required: true
+          name: lastName
+          in: formData
+          type: string
+        - required: true
+          name: email
+          in: formData
+          type: string
+        - required: true
+          name: password
+          in: formData
+          type: string
+        - required: true
+          name: role
+          in: formData
+          type: string
+          enum:
+            - Admin
+            - Teacher
+            - Parent
+        - required: true
+          name: photo
+          in: formData
+          type: file
+          description: Images to be uploaded
+      produces:
+        - application/json
+      consumes:
+        - multipart/form-data
+  
+  /school/createSchool:
+    post:
+      tags:
+        - School
+      summary: Register school
+      security:
+        - bearerAuth: []
+      description: >-
+        Register
+      responses:
+        "201":
+          description: Registerd successfully
+          examples:
+            application/json:
+              data: data
+          schema:
+            type: object
+      parameters:
+        - required: true
+          name: schoolName
+          in: formData
+          type: string
+        - required: true
+          name: userId
+          in: formData
+          type: integer
+        - required: true
+          name: photo
+          in: formData
+          type: file
+          description: Images to be uploaded
+      produces:
+        - application/json
+      consumes:
+        - multipart/form-data
+  /school/getMySchool/{userId}:
+    get:
+      tags:
+        - School
+      summary: get user school
+      security:
+        - bearerAuth: []
+      description: >-
+        get user school
+      parameters:
+        - required: true
+          name: userId
+          in: path
+          type: integer
+      responses:
+        "200":
+          description: OK
+      
+  /class/createClass:
+    post:
+      tags:
+        - Class
+      summary: Register Class
+      security:
+        - bearerAuth: []
+      description: >-
+        Register
+      responses:
+        "201":
+          description: Registerd successfully
+          examples:
+            application/json:
+              data: data
+          schema:
+            type: object
+      parameters:
+        - required: true
+          name: className
+          in: formData
+          type: string
+        - required: true
+          name: schoolId
+          in: formData
+          type: integer
+      produces:
+        - application/json
+      consumes:
+        - multipart/form-data
+  /class/getClasses/{userId}/{schoolId}:
+    get:
+      tags:
+        - Class
+      summary: get user Class
+      security:
+        - bearerAuth: []
+      description: >-
+        get user school Class
+      parameters:
+        - required: true
+          name: userId
+          in: path
+          type: integer
+        - required: true
+          name: schoolId
+          in: path
+          type: integer
+      responses:
+        "200":
+          description: OK
+  /class/getClassStudent/{classId}/{schoolId}:
+    get:
+      tags:
+        - Class
+      summary: get student classwise
+      security:
+        - bearerAuth: []
+      description: >-
+        get student classwise
+      parameters:
+        - required: true
+          name: classId
+          in: path
+          type: integer
+        - required: true
+          name: schoolId
+          in: path
+          type: integer
+      responses:
+        "200":
+          description: OK 
+  /class/assignStudentInClass/{classId}/{studentId}/{schoolId}:
+    post:
+      tags:
+        - Class
+      summary: assign student in class
+      security:
+        - bearerAuth: []
+      description: >-
+        assign student in class
+      parameters:
+        - required: true
+          name: classId
+          in: path
+          type: integer
+        - required: true
+          name: studentId
+          in: path
+          type: integer
+        - required: true
+          name: schoolId
+          in: path
+          type: integer
+      responses:
+        "200":
+          description: OK
+     
+  /student/createStudent:
+    post:
+      tags:
+        - Student
+      summary: Register Student
+      security:
+        - bearerAuth: []
+      description: >-
+        Register
+      responses:
+        "201":
+          description: Registerd successfully
+          examples:
+            application/json:
+              data: data
+          schema:
+            type: object
+      parameters:
+        - required: true
+          name: firstName
+          in: formData
+          type: string
+        - required: true
+          name: lastName
+          in: formData
+          type: string
+        - required: true
+          name: schoolId
+          in: formData
+          type: integer
+        - required: true
+          name: photo
+          in: formData
+          type: file
+          description: Images to be uploaded
+      produces:
+        - application/json
+      consumes:
+        - multipart/form-data
+  /student/getStudentBySchoolId/{schoolId}:
+    get:
+      tags:
+        - Student
+      summary: get Students
+      security:
+        - bearerAuth: []
+      description: >-
+        get Students
+      parameters:
+        - required: true
+          name: schoolId
+          in: path
+          type: integer
+      responses:
+        "200":
+          description: OK
+  /student/activeInAllClassStudent/{userId}/{schoolId}:
+    get:
+      tags:
+        - Student
+      summary: get students which are part of all created class
+      security:
+        - bearerAuth: []
+      description: >-
+        get students which are part of all created class
+      parameters:
+        - required: true
+          name: userId
+          in: path
+          type: integer
+        - required: true
+          name: schoolId
+          in: path
+          type: integer
+      responses:
+        "200":
+          description: OK
+  /student/getClassmateSpecificStudent/{userId}/{schoolId}/{studentId}:
+    get:
+      tags:
+        - Student
+      summary: get classmates of specific student. Which are classmates and part of all classes of specific student
+      security:
+        - bearerAuth: []
+      description: >-
+        get students which are classmate of mine
+      parameters:
+        - required: true
+          name: userId
+          in: path
+          type: integer
+        - required: true
+          name: schoolId
+          in: path
+          type: integer
+        - required: true
+          name: studentId
+          in: path
+          type: integer
+      responses:
+        "200":
+          description: OK
+      
+
+securityDefinitions:
+  basicAuth:
+    type: basic
+  bearerAuth:
+    type: apiKey
+    name: Authorization
+    in: header

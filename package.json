@@ -1,0 +1,42 @@
+{
+  "name": "equitysoft",
+  "version": "1.0.0",
+  "description": "Equitysoft assignment",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "build": "babel server --out-dir dist --delete-dir-on-start --source-maps inline --copy-files",
+    "dev": "nodemon server --exec babel-node --config .nodemonrc.json | pino-pretty",
+    "dev:debug": "nodemon server --exec babel-node --config .nodemonrc.json --inspect | pino-pretty"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^9.0.1",
+    "mssql": "^9.1.1",
+    "nodemailer": "^6.9.5",
+    "pino": "^6.11.3",
+    "sharp": "^0.32.5",
+    "swagger-express-middleware": "^4.0.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.14.3",
+    "@babel/core": "^7.14.3",
+    "@babel/node": "^7.14.2",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.14.2",
+    "@babel/plugin-proposal-optional-chaining": "^7.14.2",
+    "@babel/preset-env": "^7.14.4",
+    "@babel/register": "^7.13.16",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.27.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "nodemon": "^2.0.7",
+    "pino-pretty": "^5.0.1",
+    "prettier": "^2.3.0"
+  },
+  "author": "Sanhil Rai <sanhilrai143@gmail.com>"
+}

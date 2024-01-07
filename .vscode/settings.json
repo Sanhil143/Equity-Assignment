@@ -1,0 +1,5 @@
+{
+  "azure.resourceFilter": null,
+  "appService.defaultWebAppToDeploy": "/subscriptions/bdd95abf-c328-42cf-9f4d-460333bce7c3/resourceGroups/Wiraa/providers/Microsoft.Web/sites/wiraa-api",
+  "appService.deploySubpath": "."
+}
