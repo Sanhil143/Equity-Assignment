@@ -1,7 +1,7 @@
 {
   "name": "equitysoft",
   "version": "1.0.0",
-  "description": "Equitysoft assignment",
+  "description": "Equitysoft",
   "main": "index.js",
   "scripts": {
     "start": "node dist/index.js",

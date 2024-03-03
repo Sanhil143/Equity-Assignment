@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   version: 1.0.0
   title: Equitysoft
-  description: School assignment
+  description: School-Management
 basePath: /api/v1
 
 components:
@@ -161,7 +161,7 @@ paths:
           schema:
             type: object
       parameters:
-        - required: true
+        - required: false
           name: uniqueCode
           in: formData
           type: string

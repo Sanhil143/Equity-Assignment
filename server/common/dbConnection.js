@@ -11,10 +11,10 @@ const connConfig = {
     min: 0,
     idleTimeoutMillis: 30000,
   },
-  // options: {
+  options: {
   //   encrypt: true, // for azure
     trustServerCertificate: true, // change to true for local dev / self-signed certs
-  // },
+   },
 };
 
 mssql.on('error', (err) => {
