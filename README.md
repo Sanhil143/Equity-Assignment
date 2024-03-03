@@ -1,3 +1,2 @@
-# Equitysoft Assignment
-
+# School Management
 Assignment by Sanhil❤️

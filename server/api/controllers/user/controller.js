@@ -81,7 +81,7 @@ class Controller {
               .status(401)
               .send({ status: false, message: "invalid password" });
           }
-          delete user[0].Password;
+          delete user[0].password;
           const token = jwt.sign(
             { userId: user[0].userId,role:user[0].role},
             process.env.JWT_SECRET,

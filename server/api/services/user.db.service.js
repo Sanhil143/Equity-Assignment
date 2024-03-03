@@ -44,10 +44,11 @@ class AuthDatabase {
            @email, 
            @password, 
            @photo, 
-           @role);
+           @role)
            END
            END
-          `
+           `
+          
           );
       })
       .then((result) => {
@@ -76,6 +77,7 @@ class AuthDatabase {
           lastName,
           photo as userProfile,
           email,
+          password,
           role
           from tblUsers
           where email = @email and isDeleted = 0`
