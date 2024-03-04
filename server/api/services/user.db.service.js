@@ -47,11 +47,11 @@ class AuthDatabase {
            @role)
            END
            END
-           `
-          
+           `          
           );
       })
       .then((result) => {
+        console.log(result)
         if (result.rowsAffected && result.rowsAffected[0] > 0) {
           return "user registration has done successfully";
         } else {
