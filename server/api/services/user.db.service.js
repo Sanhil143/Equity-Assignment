@@ -17,7 +17,7 @@ class AuthDatabase {
           .input("role", sql.NVarChar, data.role)
           .query(
             `
-           IF EXISTS (SELECT 1 FROM tblUsers WHERE email = @email AND isDeleted = 0)
+           IF NOT EXISTS (SELECT 1 FROM tblUsers WHERE email = @email AND isDeleted = 0)
            BEGIN
            IF EXISTS (SELECT 1 FROM tblSchools WHERE uniqueCode = @uniqueCode AND isDeleted = 0)
            BEGIN
@@ -51,7 +51,6 @@ class AuthDatabase {
           );
       })
       .then((result) => {
-        console.log(result)
         if (result.rowsAffected && result.rowsAffected[0] > 0) {
           return "user registration has done successfully";
         } else {
