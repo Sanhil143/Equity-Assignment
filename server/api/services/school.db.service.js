@@ -14,26 +14,30 @@ class SchoolDatabase {
           .input("userId", sql.Int, data.userId)
           .input("role", sql.NVarChar, data.role)
           .query(
-            `DECLARE @InsertedUserId INT 
-          
-            IF NOT EXISTS (SELECT 1 FROM tblSchools WHERE email = @schoolName)
+            `
+            DECLARE @insertedSchoolId INT 
+            IF NOT EXISTS (SELECT 1 FROM tblSchools WHERE name = @schoolName)
             BEGIN
                 INSERT INTO tblSchools (
-                    name, 
-                    uniqueCode,
-                    photo
+                name, 
+                uniqueCode,
+                photo
                 )
                 VALUES (
-                    @schoolName, 
-                    @uniqueCode,
-                    @photo
+                @schoolName, 
+                @uniqueCode,
+                @photo
                 )
-            
-                SET @InsertedUserId = SCOPE_IDENTITY()
-                insert into tblUserScool(
-                  userId,schoolId,role
-                ) values (
-                  @userId, @schoolId, @role
+                SET @insertedSchoolId = SCOPE_IDENTITY()
+                INSERT INTO tblUserSchools (
+                userId,
+                schoolId,
+                role
+                ) 
+                VALUES (
+                @userId, 
+                @insertedSchoolId,
+                @role
                 )
             END`
           );
@@ -67,9 +71,9 @@ class SchoolDatabase {
             tblSchools.photo,
             tblSchools.uniqueCode
             from tblUsers
-            inner join tblUserSchools on tblUsers.userId and tblUserSchools.userId
-            inner join tblSchools on tblUserSchools.schoolId and tblSchools.schoolId
-            where tblUsers.userId = @id and isDeleted = 0
+            inner join tblUserSchools on tblUsers.userId = tblUserSchools.userId
+            inner join tblSchools on tblUserSchools.schoolId = tblSchools.schoolId
+            where tblUsers.userId = @userId and tblUsers.isDeleted = 0
 					`
           );
       })

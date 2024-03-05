@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   version: 1.0.0
-  title: Equitysoft
+  title: School-Management
   description: School-Management
 basePath: /api/v1
 
@@ -116,6 +116,7 @@ paths:
       responses:
         200:
           description: Return the API specification
+
   /user/login:
     post:
       tags:

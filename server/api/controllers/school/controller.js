@@ -29,16 +29,17 @@ class SchoolController {
     }
     SchoolService.createSchool(req.body)
       .then((result) => {
-        if (!result || result === "error during school addition" || result === "string") {
-          return res.status(400).send({
-            status: false,
-            message: "bad request during school creation",
-          });
+        if (result === "School added successfully") {
+          return res.status(201).send({
+            status: true,
+            message: "Registration has been Successfully"
+          }); 
         }
-        return res.status(201).send({
-          status: true,
-          message: "Registration has been Successfully"
+        return res.status(400).send({
+          status: false,
+          message: "bad request during school creation",
         });
+        
       })
       .catch((err) => {
         return res.status(500).send({ status: false, message: err.message });
