@@ -1,7 +1,7 @@
 {
-  "name": "equitysoft",
+  "name": "school-management",
   "version": "1.0.0",
-  "description": "Equitysoft",
+  "description": "school-management",
   "main": "index.js",
   "scripts": {
     "start": "node dist/index.js",
