@@ -8,7 +8,7 @@ class ClassDatabase {
       .then((pool) => {
         return pool
           .request()
-          .input("className", sql.NVarChar, data.schoolName)
+          .input("className", sql.NVarChar, data.className)
           .input("schoolId", sql.Int, data.schoolId)
           .query(
             `
@@ -38,15 +38,16 @@ class ClassDatabase {
           .input("schoolId", sql.Int, schoolId)
           .query(
             `select 
+            tblUsers.userId,
             tblSchools.schoolId,
             tblclasses.classId,
             tblSchools.name as schoolName,
             tblSchools.photo as schoolImage,
             tblClasses.name as className
             from tblClasses
-            inner join tblSchools on tblClasses.schoolId and tblSchool.schoolId
-            inner join tblUserSchools on tblSchools.schoolId and tblUserSchools.schoolId
-            inner join tblUsers on tblUserSchools.userId and tblUsers.userId
+            inner join tblSchools on tblClasses.schoolId = tblSchools.schoolId
+            inner join tblUserSchools on tblSchools.schoolId = tblUserSchools.schoolId
+            inner join tblUsers on tblUserSchools.userId = tblUsers.userId
             where tblUsers.userId = @userId and tblSchools.schoolId = @schoolId 
             and tblSchools.isDeleted = 0 and tblClasses.isDeleted = 0 and tblUsers.isDeleted = 0`
           );
@@ -77,10 +78,11 @@ class ClassDatabase {
             tblStudents.lastName,
             tblStudents.photo as studentProfile
             from tblClassStudents
-            inner join tblSchools on tblClassStudents.schoolId and tblSchool.schoolId
-            inner join tblStudents on tblClassStudents.studentId and tblStudents.studentId
+            inner join tblSchools on tblClassStudents.schoolId = tblSchools.schoolId
+            inner join tblStudents on tblClassStudents.studentId = tblStudents.studentId
+            inner join tblClasses on tblClassStudents.classId = tblClasses.classId
             where tblClassStudents.schoolId = @schoolId and tblClassStudents.classId = @classId 
-            and tblSchools.isDeleted = 0 and tblClasses.isDeleted = 0 and tblStudents.studentId = 0`
+            and tblSchools.isDeleted = 0 and tblClasses.isDeleted = 0 and tblStudents.isDeleted = 0`
           );
       })
       .then((result) => {
