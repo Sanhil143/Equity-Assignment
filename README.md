@@ -1,2 +1,1 @@
-# School Management
-Assignment by Sanhil❤️
+School-Management by Sanhil❤️

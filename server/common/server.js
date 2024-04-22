@@ -1,6 +1,7 @@
 import Express from 'express';
 import * as path from 'path';
 import * as http from 'http';
+import cors from 'cors';
 import * as os from 'os';
 import l from './logger';
 import oas from './swagger';
@@ -18,6 +19,7 @@ export default class ExpressServer {
         limit: process.env.REQUEST_LIMIT || '100kb',
       })
     );
+    app.use(cors());
     app.use(Express.text({ limit: process.env.REQUEST_LIMIT || '100kb' }));
     app.use(Express.static(`${root}/public`));
   }
