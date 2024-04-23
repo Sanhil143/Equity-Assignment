@@ -182,7 +182,7 @@ paths:
           name: password
           in: formData
           type: string
-        - required: true
+        - required: false
           name: role
           in: formData
           type: string
@@ -190,7 +190,7 @@ paths:
             - Admin
             - Teacher
             - Parent
-        - required: true
+        - required: false
           name: photo
           in: formData
           type: file

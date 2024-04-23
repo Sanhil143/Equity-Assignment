@@ -18,9 +18,7 @@ class Controller {
         .send({ status: false, message: "lastname is needed" });
     }
     if (!role) {
-      return res
-        .status(400)
-        .send({ status: false, message: "role is needed" });
+      req.body.role = "Admin"
     }
     if (!email) {
       return res
