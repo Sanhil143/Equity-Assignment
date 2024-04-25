@@ -70,7 +70,7 @@ class SchoolDatabase {
             tblSchools.name,
             tblSchools.photo,
             tblSchools.uniqueCode,
-            tblSchools.createdAt,
+            tblSchools.createdAt
             from tblUsers
             inner join tblUserSchools on tblUsers.userId = tblUserSchools.userId
             inner join tblSchools on tblUserSchools.schoolId = tblSchools.schoolId
