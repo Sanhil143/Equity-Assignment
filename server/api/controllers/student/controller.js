@@ -45,6 +45,27 @@ class StudentController {
       });
   }
 
+  getStudentById(req, res) {
+    if (!req.params.studentId) {
+      return res
+        .status(400)
+        .send({ status: false, message: "studentId is required" });
+    }
+    StudentService.getStudentById(req.params.studentId)
+      .then((r) => {
+        if (r.length === 0) {
+          res
+            .status(404)
+            .json({ status: false, message: "resource not found" });
+        } else {
+          res.json(r);
+        }
+      })
+      .catch((error) => {
+        res.status(500).json({ status: false, message: error.message });
+      });
+  }
+
   getStudentBySchoolId(req, res) {
     if (!req.params.schoolId) {
       return res

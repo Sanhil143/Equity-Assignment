@@ -390,6 +390,23 @@ paths:
         - application/json
       consumes:
         - multipart/form-data
+  /student/getStudentById/{studentId}:
+    get:
+      tags:
+        - Student
+      summary: get Students
+      security:
+        - bearerAuth: []
+      description: >-
+        get Students
+      parameters:
+        - required: true
+          name: studentId
+          in: path
+          type: integer
+      responses:
+        "200":
+          description: OK
   /student/getStudentBySchoolId/{schoolId}:
     get:
       tags:

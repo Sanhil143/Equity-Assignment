@@ -30,6 +30,28 @@ class StudentDatabase {
       });
   }
 
+  getStudentById(studentId) {
+    return mssqlconn
+      .getDbConnection()
+      .then((pool) => {
+        return pool
+          .request()
+          .input("studentId", sql.Int, studentId)
+          .query(
+            `select 
+          * 
+          from tblStudents
+          where studentId = @studentId and isDeleted = 0`
+          );
+      })
+      .then((result) => {
+        return result.recordset;
+      })
+      .catch((err) => {
+        return err.message;
+      });
+  }
+
   getStudentBySchoolId(schoolId) {
     return mssqlconn
       .getDbConnection()
