@@ -7,6 +7,11 @@ class StudentService {
     return db.createStudent(data);
   }
 
+  getStudentById(studentId) {
+    l.info(`${this.constructor.name}.getStudentById(${studentId})`);
+    return db.getStudentById(studentId);
+  }
+
   getStudentBySchoolId(schoolId) {
     l.info(`${this.constructor.name}.getStudentBySchoolId(${schoolId})`);
     return db.getStudentBySchoolId(schoolId);
