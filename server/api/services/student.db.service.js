@@ -38,10 +38,16 @@ class StudentDatabase {
           .request()
           .input("studentId", sql.Int, studentId)
           .query(
-            `select 
-          * 
+          `select 
+          studentId,
+		      firstName,
+		      lastName,
+		      tblStudents.photo,
+		      name as schoolName,
+		      tblStudents.createdAt
           from tblStudents
-          where studentId = @studentId and isDeleted = 0`
+		      inner join tblSchools on tblStudents.schoolId = tblSchools.schoolId
+          where studentId = @studentId and tblStudents.isDeleted = 0`
           );
       })
       .then((result) => {
@@ -60,14 +66,16 @@ class StudentDatabase {
           .request()
           .input("schoolId", sql.Int, schoolId)
           .query(
-            `select
+            `select  
+		        name as schoolName,
 						studentId,
 						firstName,
 						lastName,
-						photo as studentProfilePic,
-						createdAt
+						tblSchools.photo as studentProfilePic,
+						tblSchools.createdAt
 						from tblStudents
-						where schoolId = @schoolId and isDeleted = 0`
+            inner join tblSchools on tblStudents.schoolId = tblSchools.schoolId
+						where tblStudents.schoolId = @schoolId and tblStudents.isDeleted = 0`
           );
       })
       .then((result) => {
