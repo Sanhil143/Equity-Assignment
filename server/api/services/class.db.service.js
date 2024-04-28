@@ -28,7 +28,7 @@ class ClassDatabase {
       });
   }
 
-  getClasses(schoolId,userId) {
+  getClasses(schoolId, userId) {
     return mssqlconn
       .getDbConnection()
       .then((pool) => {
@@ -38,18 +38,31 @@ class ClassDatabase {
           .input("schoolId", sql.Int, schoolId)
           .query(
             `select 
-            tblUsers.userId,
+            tblUsers.userId as adminId,
             tblSchools.schoolId,
             tblclasses.classId,
             tblSchools.name as schoolName,
             tblSchools.photo as schoolImage,
-            tblClasses.name as className
+            tblClasses.name as className,
+			      count(tblClassStudents.studentId) as classMembers
             from tblClasses
             inner join tblSchools on tblClasses.schoolId = tblSchools.schoolId
             inner join tblUserSchools on tblSchools.schoolId = tblUserSchools.schoolId
             inner join tblUsers on tblUserSchools.userId = tblUsers.userId
-            where tblUsers.userId = @userId and tblSchools.schoolId = @schoolId 
-            and tblSchools.isDeleted = 0 and tblClasses.isDeleted = 0 and tblUsers.isDeleted = 0`
+			      left join tblClassStudents on tblClasses.classId = tblClassStudents.classId
+            where tblUsers.userId = @userId 
+			      and tblSchools.schoolId = @schoolId 
+            and tblSchools.isDeleted = 0 
+			      and tblClasses.isDeleted = 0 
+			      and tblUsers.isDeleted = 0
+			      group by 
+			      tblUsers.userId,
+            tblSchools.schoolId,
+            tblClasses.classId,
+            tblSchools.name,
+            tblSchools.photo,
+            tblClasses.name;
+            `
           );
       })
       .then((result) => {
@@ -60,7 +73,7 @@ class ClassDatabase {
       });
   }
 
-  getClassStudent(schoolId,classId) {
+  getClassStudent(schoolId, classId) {
     return mssqlconn
       .getDbConnection()
       .then((pool) => {
@@ -76,7 +89,8 @@ class ClassDatabase {
             tblClasses.name as className,
             tblStudents.firstName,
             tblStudents.lastName,
-            tblStudents.photo as studentProfile
+            tblStudents.photo as studentProfile,
+            tblStudents.createdAt
             from tblClassStudents
             inner join tblSchools on tblClassStudents.schoolId = tblSchools.schoolId
             inner join tblStudents on tblClassStudents.studentId = tblStudents.studentId
@@ -93,7 +107,7 @@ class ClassDatabase {
       });
   }
 
-  assignStudentInClass(classId,studentId,schoolId){
+  assignStudentInClass(classId, studentId, schoolId) {
     return mssqlconn
       .getDbConnection()
       .then((pool) => {
@@ -106,7 +120,7 @@ class ClassDatabase {
             `
             insert into tblClassStudents(classId,studentId,schoolId)
              values(@classId,@studentId,@schoolId)`
-            );
+          );
       })
       .then((result) => {
         if (result.rowsAffected && result.rowsAffected[0] > 0) {
