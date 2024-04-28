@@ -252,6 +252,23 @@ paths:
       responses:
         "200":
           description: OK
+  /school/getMySchoolTeacher/{schoolId}:
+    get:
+      tags:
+        - School
+      summary: get user school
+      security:
+        - bearerAuth: []
+      description: >-
+        get user school
+      parameters:
+        - required: true
+          name: schoolId
+          in: path
+          type: integer
+      responses:
+        "200":
+          description: OK
       
   /class/createClass:
     post:

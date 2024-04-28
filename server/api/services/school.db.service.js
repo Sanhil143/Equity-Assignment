@@ -85,6 +85,36 @@ class SchoolDatabase {
         return err.message;
       });
   }
+
+  getMySchoolTeacher(schoolId) {
+    return mssqlconn
+      .getDbConnection()
+      .then((pool) => {
+        return pool
+          .request()
+          .input("schoolId", sql.Int, schoolId)
+          .query(
+            `select
+            tblUsers.userId as teacherId,
+            tblUsers.firstName,
+            tblUsers.lastName,
+            tblUsers.photo as ProfilePic,
+            tblSchools.name as schoolName,
+            tblUsers.createdAt
+            from tblUserSchools
+            inner join tblUsers on tblUserSchools.userId = tblUsers.userId
+            inner join tblSchools on tblUserSchools.schoolId = tblSchools.schoolId
+            where tblUserSchools.schoolId = @schoolId and tblUsers.role = 'Teacher' and tblUsers.isDeleted = 0
+					`
+          );
+      })
+      .then((result) => {
+        return result.recordset;
+      })
+      .catch((err) => {
+        return err.message;
+      });
+  }
 }
 
 export default new SchoolDatabase();

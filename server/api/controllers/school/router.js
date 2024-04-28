@@ -5,4 +5,5 @@ import { middleWare } from "../../middlewares/jwtAuth";
 export default express
   .Router()
   .post('/createSchool',middleWare(['Admin']),controller.createSchool)
-  .get('/getMySchool/:userId',middleWare(['Admin','Teacher']),controller.getMySchool);
+  .get('/getMySchool/:userId',middleWare(['Admin','Teacher']),controller.getMySchool)
+  .get('/getMySchoolTeacher/:schoolId',middleWare(['Admin']),controller.getMySchoolTeacher);
