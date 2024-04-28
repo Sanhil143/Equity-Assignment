@@ -60,6 +60,21 @@ class SchoolController {
       res.status(500).json({ status: false, message: error.message });
     });
   }
+
+  getMySchoolTeacher(req,res){
+    if(!req.params.schoolId){
+      return res.status(400).send({status:false,message:'schoolId is required'})
+    }
+    SchoolService.getMySchoolTeacher(req.params.schoolId).then((r) => {
+      if (r.length === 0) {
+        res.status(404).json({ status: false, message: "resource not found" });
+      } else {
+        res.json(r);
+      }
+    }).catch((error) => {
+      res.status(500).json({ status: false, message: error.message });
+    });
+  }
 }
 
 export default new SchoolController();

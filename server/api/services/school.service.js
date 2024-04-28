@@ -11,6 +11,11 @@ class SchoolService {
     l.info(`${this.constructor.name}.getMySchool(${userId})`);
     return db.getMySchool(userId);
   }
+
+  getMySchoolTeacher(schoolId) {
+    l.info(`${this.constructor.name}.getMySchoolTeacher(${schoolId})`);
+    return db.getMySchoolTeacher(schoolId);
+  }
 }
 
 export default new SchoolService();
