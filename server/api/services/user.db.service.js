@@ -77,7 +77,8 @@ class AuthDatabase {
           photo as userProfile,
           email,
           password,
-          role
+          role,
+          createdAt
           from tblUsers
           where email = @email and isDeleted = 0`
           );
