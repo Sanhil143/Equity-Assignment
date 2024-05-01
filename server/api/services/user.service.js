@@ -12,6 +12,11 @@ class AuthService {
     return db.userLogin(data);
   }
 
+  updateProfile(data,userId) {
+    l.info(`${this.constructor.name}.updateProfile(${userId})`);
+    return db.updateProfile(data,userId);
+  }
+
   
 }
 

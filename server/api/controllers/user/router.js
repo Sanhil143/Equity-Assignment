@@ -4,4 +4,5 @@ import controller from './controller';
 export default express
   .Router()
   .post('/signup',controller.userSignup)
-  .post('/login',controller.userLogin);
+  .post('/login',controller.userLogin)
+  .patch('/updateProfile/:userId',controller.updateProfile)

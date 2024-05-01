@@ -47,7 +47,7 @@ class AuthDatabase {
            @role)
            END
            END
-           `          
+           `
           );
       })
       .then((result) => {
@@ -93,6 +93,41 @@ class AuthDatabase {
       .catch((err) => {
         return err.message;
       });
+  }
+
+  async updateProfile(data, userId) {
+    try {
+      const pool = await mssqlconn.getDbConnection();
+      const request = pool.request().input('userId', sql.Int, userId);
+  
+      const updates = [];
+      if (data.firstName) {
+        request.input('firstName', sql.NVarChar, data.firstName);
+        updates.push('firstName = @firstName');
+      }
+      if (data.lastName) {
+        request.input('lastName', sql.NVarChar, data.lastName);
+        updates.push('lastName = @lastName');
+      }
+      if (data.email) {
+        request.input('email', sql.NVarChar, data.email);
+        updates.push('email = @email');
+      }
+  
+      if (updates.length === 0) {
+        throw new Error('No fields to update.');
+      }
+  
+      const query = `UPDATE tblUsers SET ${updates.join(', ')} WHERE userId = @userId`;
+      const result = await request.query(query);
+      
+      if(result.rowsAffected[0] > 0){
+        return 'profile updated successfully'
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      throw error;
+    }
   }
 }
 

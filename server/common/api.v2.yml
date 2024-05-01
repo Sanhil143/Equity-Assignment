@@ -199,6 +199,42 @@ paths:
         - application/json
       consumes:
         - multipart/form-data
+  /user/updateProfile/{userId}:
+    patch:
+      tags:
+        - User
+      summary: update user data
+      description: >-
+        update
+      responses:
+        "201":
+          description: Updated successfully
+          examples:
+            application/json:
+              data: data
+          schema:
+            type: object
+      parameters:
+        - required: true
+          name: userId
+          in: path
+          type: integer
+        - required: false
+          name: firstName
+          in: formData
+          type: string
+        - required: false
+          name: lastName
+          in: formData
+          type: string
+        - required: false
+          name: email
+          in: formData
+          type: string
+      produces:
+        - application/json
+      consumes:
+        - multipart/form-data
   
   /school/createSchool:
     post:
