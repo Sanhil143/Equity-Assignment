@@ -204,6 +204,8 @@ paths:
       tags:
         - User
       summary: update user data
+      security:
+        - bearerAuth: []
       description: >-
         update
       responses:
@@ -262,7 +264,7 @@ paths:
           name: userId
           in: formData
           type: integer
-        - required: true
+        - required: false
           name: photo
           in: formData
           type: file
@@ -434,7 +436,7 @@ paths:
           name: schoolId
           in: formData
           type: integer
-        - required: true
+        - required: false
           name: photo
           in: formData
           type: file
