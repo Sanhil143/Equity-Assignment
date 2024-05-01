@@ -63,7 +63,7 @@ class SchoolController {
 
   getMySchoolTeacher(req,res){
     if(!req.params.schoolId){
-      return res.status(400).send({status:false,message:'schoolId is required'})
+      return res.status(400).send({status:false,message:'schoolId is required'});
     }
     SchoolService.getMySchoolTeacher(req.params.schoolId).then((r) => {
       if (r.length === 0) {

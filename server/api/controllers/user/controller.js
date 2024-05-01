@@ -5,7 +5,7 @@ import { compressImages } from "../../../common/images";
 
 class Controller {
   async userSignup(req, res) {
-    const { firstName, lastName, email, password,role,uniqueCode } = req.body;
+    const { firstName, lastName, email, password, role, uniqueCode } = req.body;
     const image = req.files;
     if (!firstName) {
       return res
@@ -18,7 +18,7 @@ class Controller {
         .send({ status: false, message: "lastname is needed" });
     }
     if (!role) {
-      req.body.role = "Admin"
+      req.body.role = "Admin";
     }
     if (!email) {
       return res
@@ -33,18 +33,23 @@ class Controller {
     }
     const hashed = await bcrypt.hash(password, 10);
     req.body.password = hashed;
-    const folderPath = './images/userProfileImage'
+    const folderPath = "./images/userProfileImage";
     let imageUrl;
-    if(image.photo !== undefined){
-      imageUrl = await compressImages(image,folderPath,'userProfileImage');
+    if (image.photo !== undefined) {
+      imageUrl = await compressImages(image, folderPath, "userProfileImage");
       req.body.photo = imageUrl;
     }
     AuthService.userSignup(req.body)
       .then((r) => {
-        if(r === 'user registration has done successfully'){
-          return res.status(201).send({status:true,message:'user account created successfully'})
+        if (r === "user registration has done successfully") {
+          return res.status(201).send({
+            status: true,
+            message: "user account created successfully",
+          });
         }
-        return res.status(400).send({status:false,error:'error during user account creation'})
+        return res
+          .status(400)
+          .send({ status: false, error: "error during user account creation" });
       })
       .catch((err) => {
         return res.status(500).send({ status: false, message: err.message });
@@ -81,7 +86,7 @@ class Controller {
           }
           delete user[0].password;
           const token = jwt.sign(
-            { userId: user[0].userId,role:user[0].role},
+            { userId: user[0].userId, role: user[0].role },
             process.env.JWT_SECRET,
             {
               expiresIn: "7d",
@@ -99,6 +104,34 @@ class Controller {
       .catch((error) => {
         return res.status(500).send({ status: false, message: error.message });
       });
+  }
+
+  updateProfile(req, res) {
+    try {
+      if (!req.body) {
+        return res
+          .status(400)
+          .send({ status: false, error: "please provide some data" });
+      }
+      if (!req.params.userId) {
+        return res
+          .status(400)
+          .send({ status: false, error: "userId is required" });
+      }
+      AuthService.updateProfile(req.body, req.params.userId).then((r) => {
+        if (r === "profile updated successfully") {
+          return res
+            .status(200)
+            .send({ status: true, message: "profile updated successfully" });
+        } else {
+          return res
+            .status(400)
+            .send({ status: false, error: "error during profile updation" });
+        }
+      });
+    } catch (error) {
+      return res.status(500).send({ status: false, error: error.message });
+    }
   }
 }
 export default new Controller();
