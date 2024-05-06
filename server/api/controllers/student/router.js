@@ -8,4 +8,5 @@ export default express
   .get("/getStudentById/:studentId",middleWare(["Admin", "Teacher","Parent"]),controller.getStudentById)
   .get("/getStudentBySchoolId/:schoolId",middleWare(["Admin", "Teacher"]),controller.getStudentBySchoolId)
   .get("/activeInAllClassStudent/:userId/:schoolId",middleWare(["Admin", "Teacher"]),controller.activeInAllClassStudent)
-  .get("/getClassmateSpecificStudent/:userId/:schoolId/:studentId",middleWare(["Admin", "Teacher", "Parent"]),controller.getClassmateSpecificStudent);
+  .get("/getClassmateSpecificStudent/:userId/:schoolId/:studentId",middleWare(["Admin", "Teacher", "Parent"]),controller.getClassmateSpecificStudent)
+  .post("/assignStudentToClass/:userId/:schoolId/:classId",middleWare(["Admin"]),controller.assignStudentToClass)

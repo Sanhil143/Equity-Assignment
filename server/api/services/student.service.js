@@ -26,6 +26,11 @@ class StudentService {
     l.info(`${this.constructor.name}.getClassmateSpecificStudent(${userId},${schoolId},${studentId})`);
     return db.getClassmateSpecificStudent(userId,schoolId,studentId);
   }
+
+  assignStudentToClass(data, schoolId, classId){
+    l.info(`${this.constructor.name}.assignStudentToClass(${schoolId},${classId})`);
+    return db.assignStudentToClass(data,schoolId,classId);
+  }
 }
 
 export default new StudentService();

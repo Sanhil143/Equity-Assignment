@@ -38,7 +38,7 @@ class StudentDatabase {
           .request()
           .input("studentId", sql.Int, studentId)
           .query(
-          `select 
+            `select 
           studentId,
 		      firstName,
 		      lastName,
@@ -171,6 +171,61 @@ class StudentDatabase {
         return result.recordset;
       })
       .catch((err) => {
+        return err.message;
+      });
+  }
+
+  assignStudentToClass(data, schoolId, classId) {
+    return mssqlconn
+      .getDbConnection()
+      .then((pool) => {
+        return pool
+          .request()
+          .input("firstname", sql.NVarChar, data.firstName)
+          .input("lastname", sql.NVarChar, data.lastName)
+          .input("schoolId", sql.Int, schoolId)
+          .input("classId", sql.Int, classId)
+          .query(
+            `begin transaction
+            declare @studentid int;
+            
+            insert into tblStudents(
+              firstName,
+              lastName,
+              schoolId
+            )
+            values(
+              @firstname,
+              @lastname,
+              @schoolId
+            );
+            
+            -- The following line was updated to correctly set @studentid to the SCOPE_IDENTITY()
+            SET @studentid = SCOPE_IDENTITY();
+            
+            insert into tblClassStudents(
+              classId,
+              studentId,
+              schoolId
+            )
+            values(
+              @classId,
+              @studentid,
+              @schoolId
+            );
+            commit transaction;
+            `
+          )
+          .then((result) => {
+            if (result.rowsAffected && result.rowsAffected[0] > 0) {
+              return "student created or assign";
+            } else {
+              return "error during student assigning";
+            }
+          });
+      })
+      .catch((err) => {
+        console.log(err.message);
         return err.message;
       });
   }
