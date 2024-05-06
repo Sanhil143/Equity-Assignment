@@ -525,6 +525,39 @@ paths:
       responses:
         "200":
           description: OK
+  /student/assignStudentToClass/{userId}/{schoolId}/{classId}:
+    post:
+      tags:
+        - Student
+      summary: student create or assign to class
+      security:
+        - bearerAuth: []
+      description: >-
+        get students which are classmate of mine
+      parameters:
+        - required: true
+          name: userId
+          in: path
+          type: integer
+        - required: true
+          name: schoolId
+          in: path
+          type: integer
+        - required: true
+          name: classId
+          in: path
+          type: integer
+        - required: true
+          name: firstName
+          in: formData
+          type: string
+        - required: true
+          name: lastName
+          in: formData
+          type: string
+      responses:
+        "200":
+          description: OK
       
 
 securityDefinitions:

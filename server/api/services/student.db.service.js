@@ -38,7 +38,7 @@ class StudentDatabase {
           .request()
           .input("studentId", sql.Int, studentId)
           .query(
-          `select 
+            `select 
           studentId,
 		      firstName,
 		      lastName,
@@ -169,6 +169,57 @@ class StudentDatabase {
       })
       .then((result) => {
         return result.recordset;
+      })
+      .catch((err) => {
+        return err.message;
+      });
+  }
+
+  assignStudentToClass(data, schoolId, classId) {
+    return mssqlconn
+      .getDbConnection()
+      .then((pool) => {
+        return pool
+          .request()
+          .input("firstname", sql.NVarChar, data.firstName)
+          .input("lastname", sql.NVarChar, data.lastName)
+          .input("schoolId", sql.Int, schoolId)
+          .input("classId", sql.Int, classId)
+          .query(
+            `
+        begin transaction
+        declare @studentid int;
+        insert into tblStudents(
+          firstName,
+          lastName,
+          schoolId
+        )
+        output inserted.schoolId into @studentid
+        values(
+          @firstname,
+          @lastname,
+          @schoolId
+        );
+        
+        insert into tblClassStudents(
+          classId,
+          studentId,
+          schoolId,
+        )
+        values(
+          @classId,
+          @studentid,
+          @schoolId
+        );
+        commit transaction;`
+          )
+          .then((result) => {
+            if (result.rowsAffected && result.rowsAffected[0] > 1) {
+              return "student created or assign";
+            } else {
+              return "error during student assigning";
+            }
+          });
       })
       .catch((err) => {
         return err.message;
