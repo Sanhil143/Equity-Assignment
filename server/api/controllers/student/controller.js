@@ -168,7 +168,7 @@ class StudentController {
       }
       StudentService.assignStudentToClass(req.body, schoolId, classId).then(
         (result) => {
-          if (result) {
+          if (result === 'student created or assign') {
             return res
               .status(201)
               .send({

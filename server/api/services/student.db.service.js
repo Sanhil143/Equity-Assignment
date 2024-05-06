@@ -186,35 +186,38 @@ class StudentDatabase {
           .input("schoolId", sql.Int, schoolId)
           .input("classId", sql.Int, classId)
           .query(
+            `begin transaction
+            declare @studentid int;
+            
+            insert into tblStudents(
+              firstName,
+              lastName,
+              schoolId
+            )
+            values(
+              @firstname,
+              @lastname,
+              @schoolId
+            );
+            
+            -- The following line was updated to correctly set @studentid to the SCOPE_IDENTITY()
+            SET @studentid = SCOPE_IDENTITY();
+            
+            insert into tblClassStudents(
+              classId,
+              studentId,
+              schoolId
+            )
+            values(
+              @classId,
+              @studentid,
+              @schoolId
+            );
+            commit transaction;
             `
-        begin transaction
-        declare @studentid int;
-        insert into tblStudents(
-          firstName,
-          lastName,
-          schoolId
-        )
-        output inserted.schoolId into @studentid
-        values(
-          @firstname,
-          @lastname,
-          @schoolId
-        );
-        
-        insert into tblClassStudents(
-          classId,
-          studentId,
-          schoolId,
-        )
-        values(
-          @classId,
-          @studentid,
-          @schoolId
-        );
-        commit transaction;`
           )
           .then((result) => {
-            if (result.rowsAffected && result.rowsAffected[0] > 1) {
+            if (result.rowsAffected && result.rowsAffected[0] > 0) {
               return "student created or assign";
             } else {
               return "error during student assigning";
@@ -222,6 +225,7 @@ class StudentDatabase {
           });
       })
       .catch((err) => {
+        console.log(err.message);
         return err.message;
       });
   }
