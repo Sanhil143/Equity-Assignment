@@ -8,8 +8,8 @@ CREATE TABLE tblUsers (
     parent_invite_code VARCHAR(255),
     teacher_invite_code VARCHAR(255),
     role VARCHAR(50) NOT NULL,
-	  createdAt DATETIME DEFAULT GETDATE(),
-	  isDeleted BIT DEFAULT 0
+	createdAt DATETIME DEFAULT GETDATE(),
+	isDeleted BIT DEFAULT 0
 );
 
 CREATE TABLE tblSchools (
@@ -58,8 +58,8 @@ CREATE TABLE tblClassStudents (
     classId INT,
     studentId INT,
     schoolId INT,
-		createdAt DATETIME DEFAULT GETDATE(),
-	  isDeleted BIT DEFAULT 0,
+	createdAt DATETIME DEFAULT GETDATE(),
+	isDeleted BIT DEFAULT 0,
     FOREIGN KEY (classId) REFERENCES tblClasses(classId),
     FOREIGN KEY (studentId) REFERENCES tblStudents(studentId),
     FOREIGN KEY (schoolId) REFERENCES tblSchools(schoolId)
